@@ -1,0 +1,59 @@
+/*
+You should use the statndard input/output
+
+in order to receive a score properly.
+
+Do not use file input and output
+
+Please be very careful. 
+*/
+
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+
+
+int Answer;
+int arr[300'005];
+
+int comp(int a, int b)
+{
+    return a > b;
+}
+
+int main(int argc, char** argv)
+{
+    int T, test_case;
+
+    cin >> T;
+    for (test_case = 0; test_case < T; test_case++)
+    {
+
+        Answer = 0;
+
+        memset(arr, 0, sizeof(arr));
+
+        int n;
+        scanf("%d", &n);
+        for (int i = 0; i < n; i++)
+            scanf("%d", &arr[i]);
+
+        sort(arr, arr + n, comp);
+
+        int ma = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if(arr[i] + n >= ma)
+                Answer++;
+                
+            ma = max(ma, arr[i] + i + 1);
+        }
+
+        cout << "Case #" << test_case + 1 << endl;
+        cout << Answer << endl;
+    }
+
+    return 0;//Your program should return 0 on normal termination.
+}
