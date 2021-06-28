@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define ll long long
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define LL pair < ll, ll >
+#define INF 1000000007
+#define LINF 1000000000000000007
+
+#define data ll
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+
+
+
+int Answer;
+int arr[200005];
+
+int comp(int a, int b)
+{
+	return a > b;
+}
+
+int main(void)
+{
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+		memset(arr, 0, sizeof(arr));
+
+		int n, k;
+		scanf("%d %d", &n, &k);
+
+		for (int i = 0; i < n; i++)
+		{
+			scanf("%d", &arr[i]);
+		}
+
+		sort(arr, arr + n, comp);
+
+		for (int i = 0; i < k; i++)
+		{
+			Answer += arr[i];
+		}
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+
+	}
+
+	return 0;
+}
