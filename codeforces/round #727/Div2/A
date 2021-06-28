@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+ 
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define ll long long
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define LL pair < ll, ll >
+#define INF 1000000007
+#define LINF 1000000000000000007
+ 
+#define data ii
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+ 
+int main(void)
+{
+	int t;
+	scanf("%d", &t);
+ 
+	while (t--)
+	{
+		ll n, x, k;
+		scanf("%lld %lld %lld", &n, &x, &k);
+ 
+		ll nex = k / x;
+		//if (k % x == 0) nex++;
+ 
+		if (n < nex)
+		{
+			printf("%lld\n", n * (n - 1) / 2);
+		}
+		else
+		{
+			ll ans = nex * n;
+			ans -= nex * (nex + 1) / 2;
+			printf("%lld\n", ans);
+		}
+	}
+}
