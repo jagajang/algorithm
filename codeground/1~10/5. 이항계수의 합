@@ -1,0 +1,81 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define ll long long
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define LL pair < ll, ll >
+#define INF 1'000'000'007
+#define LINF 1000000000000000007
+
+#define data ll
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+
+ll Answer;
+ll fact[2'000'005];
+
+ll inverse(ll a)
+{
+	ll pmin2 = INF - 2;
+
+	ll i = 1;
+	ll apowi = a;
+
+	ll ret = 1;
+	while (i <= pmin2)
+	{
+		if (i & pmin2)
+		{
+			ret = (ret * apowi) % INF;
+		}
+
+		i *= 2;
+		apowi = (apowi * apowi) % INF;
+	}
+
+	return ret;
+}
+
+int main(int argc, char** argv)
+{
+	int T, test_case;
+	cin >> T;
+
+	fact[0] = 1;
+	for (ll i = 1; i <= 2'000'002; i++)
+		fact[i] = (fact[i - 1] * i) % INF;
+
+ 	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+
+		ll n, m;
+		cin >> n >> m;
+		n++;
+		m++;
+		// Answer = (n+m)Cn - 1 = (n+m)Pn / n! - 1 = (n+m)! / n!m! - 1
+
+		Answer = fact[n + m];
+		Answer = (Answer * inverse(fact[n])) % INF;
+		Answer = (Answer * inverse(fact[m])) % INF;
+		Answer -= 1;
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
