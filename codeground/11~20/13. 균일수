@@ -50,38 +50,49 @@ int main(int argc, char** argv)
 		ll n;
 		cin >> n;
 
-		for (ll i = 2; i * i <= n; i++)
+		// n = a...a(b진수)
+
+		// a...a(i진수). b <= sqrt(n)인 경우만
+		for (ll i = 2; i * i <= n + i; i++)
 		{
+			// a...a(i진수)
 			ll mod = n % i;
 			int err = 0;
 
 			if (mod)
 			{
-				for (ll k = mod; k <= n && i <= Answer; k *= i)
-					if ((n / k) % i != mod)
+				ll temp = n;
+				while (temp)
+				{
+					if (temp % i != mod)
 					{
 						err = 1;
 						break;
 					}
 
+					temp /= i;
+				}
+
 				if (err == 0)
 					Answer = mini(Answer, i);
 			}
-
-			if (n % i == 0)
-			{
-				if (i >= n / i - 1) continue;
-				Answer = mini(Answer, n / i - 1);
-			}
 		}
 
+		// ii(b진수). b > sqrt(n)인 경우 처리
+		for (ll i = 1; i * i <= n + i; i++)
+		{
+			if (n % i == 0)
+				if(i < n / i - 1) // b = n / i - 1;
+					Answer = mini(Answer, n / i - 1);
+		}
+
+		// 한자리수인 경우
 		if (Answer == INF)
 			Answer = n - 1;
 
+		// 작은 수 처리
 		if (n < 3)
 			Answer = n + 1;
-		if (n == 3)
-			Answer = 2;
 
 		cout << "Case #" << test_case + 1 << endl;
 		cout << Answer << endl;
