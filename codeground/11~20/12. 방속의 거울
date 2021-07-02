@@ -1,0 +1,91 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define ll long long
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define LL pair < ll, ll >
+#define INF 1'000'000'007
+#define LINF 1000000000000000007
+
+#define data ll
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+
+int Answer;
+int arr[1'005][1'005];
+int visited[1'005][1'005];
+
+int dy[4] = { -1, 0, 1, 0 }; 
+int dx[4] = { 0, 1, 0, -1 };
+
+int main(int argc, char** argv)
+{
+	int T, test_case;
+	scanf("%d", &T);
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+		memset(visited, 0, sizeof(visited));
+
+		int n;
+		cin >> n;
+
+		for (int i = 1; i <= n; i++)
+		{
+			char inp[1'005];
+			cin >> inp;
+			for (int j = 0; j < n; j++)
+				arr[i][j + 1] = inp[j] - '0';
+		}
+
+		int posy = 1, posx = 1;
+		int vec = 1;
+
+		while (true)
+		{
+			if (posy == 0 || posy > n || posx == 0 || posx > n)
+				break;
+
+			if (visited[posy][posx] == 0)
+			{
+				visited[posy][posx] = 1;
+				if (arr[posy][posx])
+					Answer++;
+			}
+			
+			if (arr[posy][posx] == 2)
+			{
+				vec = 3 - vec;	
+			}
+			else if (arr[posy][posx] == 1)
+			{
+				if (vec % 2)
+					vec--;
+				else
+					vec++;
+			}
+
+			posy += dy[vec];
+			posx += dx[vec];
+		}
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
