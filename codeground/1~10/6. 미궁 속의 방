@@ -1,0 +1,87 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ull unsigned long long
+
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data ll
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+
+ll Answer;
+char str[300'005];
+
+int main(int argc, char** argv)
+{
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 1;
+
+		ll n, k;
+		cin >> n >> k;
+		cin >> str;
+
+		ll y = 0, x = 0;
+		for (ll i = 0; i < k; i++)
+		{
+			char c = str[i];
+
+			if (c == 'U')
+				y--;
+			else if (c == 'R')
+				x++;
+			else if (c == 'D')
+				y++;
+			else
+				x--;
+
+			if (y + x < n)
+			{
+				ll add = y + x;
+
+				if (add % 2 == 0)
+					Answer += add * (add + 1) / 2 + x + 1;
+				else
+					Answer += add * (add + 1) / 2 + y + 1;
+			}
+			else
+			{
+				ll add = (n - y - 1) + (n - x - 1);
+
+				if (add % 2 == 0)
+					Answer += n * n - add * (add + 1) / 2 - (n - 1 - x);
+				else
+					Answer += n * n - add * (add + 1) / 2 - (n - 1 - y);
+			}
+		}
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
