@@ -1,0 +1,107 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ull unsigned long long
+
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data ll
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+
+/* Please use the chemical symbols in the periodic table below when you solve this problem.
+      */
+
+
+int Answer;
+string chem[114] = {
+	"H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al",
+   "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe",
+   "Co", "Ni", "Cu", "Zn", "Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr",
+   "Y","Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd", "In", "Sn", "Sb",
+   "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au",
+   "Hg", "Tl", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Rf", "Db", "Sg",
+   "Bh", "Hs", "Mt", "Ds", "Rg", "Cn", "Fl", "Lv", "La", "Ce", "Pr", "Nd",
+   "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu", "Ac",
+   "Th", "Pa", "U", "Np", "Pu", "Am", "Cm", "Bk", "Cf", "Es", "Fm", "Md",
+   "No", "Lr" };
+string str;
+
+int main(int argc, char** argv)
+{
+	set < string > s;
+	for (int i = 0; i < 114; i++)
+	{
+		chem[i][0] = tolower(chem[i][0]);
+		s.insert(chem[i]);
+	}
+
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+
+		cin >> str;
+		int len = str.length();
+
+		int index = 0;
+		int nex1 = 0, nex2 = 0;
+		str.append(3, '0');
+
+		while (index < len)
+		{
+			if (s.find(str.substr(index, 1)) != s.end())
+				nex1 = 1;
+
+			if (s.find(str.substr(index, 2)) != s.end())
+				nex2 = 1;
+
+			if (nex1)
+			{
+				nex1 = nex2;
+				nex2 = 0;
+				index++;
+			}
+			else if (nex2)
+			{
+				nex1 = nex2 = 0;
+				index += 2;
+			}
+			else
+			{
+				Answer = 1;
+				break;
+			}
+		}
+
+		cout << "Case #" << test_case + 1 << endl;
+		if (Answer)
+			cout << "NO" << endl;
+		else
+			cout << "YES" << endl;
+	}
+
+	return 0;
+}
