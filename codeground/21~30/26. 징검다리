@@ -1,0 +1,97 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define iiI pair < ii, int >
+#define II pair < ii, ii>
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data ll
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+int Answer;
+int mine[50'005];
+int dp[50'005][105];
+int sum[50'005];
+int mod = 1'000'000'009;
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+		memset(mine, 0, sizeof(mine));
+		memset(dp, 0, sizeof(dp));
+		memset(sum, 0, sizeof(sum));
+
+		int n, k, l;
+		cin >> n >> k >> l;
+
+		for (int i = 0; i < l; i++)
+		{
+			ll inp;
+			cin >> inp;
+
+			mine[inp] = 1;
+		}
+
+		for (int mov = 1; mov <= k; mov++)
+			if (mine[mov] == 0)
+			{
+				dp[mov][mov] = 1;
+				sum[mov]++;
+			}
+
+		for (int pos = 1; pos < n; pos++)
+		{
+			if (sum[pos] == 0) continue;
+
+			for (int mov = 1; mov <= k; mov++)
+			{
+				if (pos + mov > n) break;
+				if (mine[pos + mov]) continue;
+
+				int diff = sum[pos] - dp[pos][mov];
+				if (diff < 0) diff += mod;
+				
+				dp[pos + mov][mov] += diff;
+				dp[pos + mov][mov] %= mod;
+
+				sum[pos + mov] += diff;
+				sum[pos + mov] %= mod;
+			}
+		}
+
+		Answer = sum[n];
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
