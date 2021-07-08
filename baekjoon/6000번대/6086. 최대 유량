@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string.h>
+#include <cstring>
+#include <math.h>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+using namespace std;
+
+#define cio ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL)
+#define ll long long
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define INF 987654321
+#define LINF 987654321987654321
+
+int arr[105][105];
+int cur[105][105];
+
+int visit[105];
+int way[105];
+
+int ans;
+
+int flow(int now, int dep)
+{
+	if (now == 25)
+	{
+		int mi = INF;
+		for (int i = 0; i < dep; i++)
+		{
+			int a = way[i];
+			int b = way[i + 1];
+
+			mi = min(mi, arr[a][b] - cur[a][b]);
+		}
+
+		for (int i = 0; i < dep; i++)
+		{
+			int a = way[i];
+			int b = way[i + 1];
+
+			cur[a][b] += mi;
+			cur[b][a] -= mi;
+		}
+
+		ans += mi;
+		return 1;
+	}
+
+	int ret = 0;
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (cur[now][i] < arr[now][i] && visit[i] == 0)
+		{
+			visit[i] = 1;
+			way[dep + 1] = i;
+			ret += flow(i, dep + 1);
+			visit[i] = 0;
+		}
+	}
+
+	return ret;
+}
+
+int main()
+{
+	cio;
+	int n;
+	cin >> n;
+
+	for (int i = 0; i < n; i++)
+	{
+		char a, b;
+		int c;
+		cin >> a >> b >> c;
+
+		a -= 'A';
+		b -= 'A';
+
+		arr[a][b] += c;
+		arr[b][a] += c;
+	}
+
+	visit[0] = 1;
+	while (flow(0, 0) == 0);
+
+	cout << ans;
+}
