@@ -1,0 +1,53 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define ll long long
+#define ii pair < int, int >
+#define Iii pair < int, ii >
+#define LL pair < ll, ll >
+#define INF 1000000007
+#define LINF 1000000000000000007
+
+#define data int
+// max heap
+#define p_q priority_queue < data >
+// min heap
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+int main()
+{
+	while (1)
+	{
+		int n;
+		scanf("%d", &n);
+
+		if (n == 0) break;
+
+		int ans = -INF;
+		int nu = 0;
+		for (int i = 0; i < n; i++)
+		{
+			int inp;
+			scanf("%d", &inp);
+
+			if (nu < 0)
+				nu = inp;
+			else
+				nu += inp;
+
+			ans = max(ans, nu);
+		}
+
+		printf("%d\n", ans);
+	}
+}
