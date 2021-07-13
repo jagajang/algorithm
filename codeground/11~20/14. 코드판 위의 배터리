@@ -1,0 +1,155 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data ll
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+double Answer;
+vector < pair < ii, ii > > line;
+vector < pair < ii, ii > > square[105];
+
+pair < ii, ii > make_four(int a, int b, int c, int d)
+{
+	return make_pair(make_pair(a, b), make_pair(c, d));
+}
+
+pair < ii, ii > find_intersect(pair < ii, ii > sq1, pair < ii, ii > sq2)
+{
+	pair < ii, ii > ret;
+
+	ret.first.first = max(sq1.first.first, sq2.first.first);
+	ret.first.second = max(sq1.first.second, sq2.first.second);
+
+	ret.second.first = min(sq1.second.first, sq2.second.first);
+	ret.second.second = min(sq1.second.second, sq2.second.second);
+
+	if (ret.first.first > ret.second.first || ret.first.second > ret.second.second)
+		return make_four(-1, -1, -1, -1);
+
+	return ret;
+}
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+		line.clear();
+
+		int n;
+		cin >> n;
+
+		if (n > 30)
+		{
+			cout << "Case #" << test_case + 1 << endl;
+			cout << 0 << endl;
+			continue;
+		}
+
+		int lef = 0, rig = 200'000'000;
+		int down = 0, up = 200'000'000;
+
+		line.push_back(make_four(-1, -1, -1, -1));
+		for (int i = 1; i <= n; i++)
+		{
+			int x1, y1, x2, y2;
+			cin >> x1 >> y1 >> x2 >> y2;
+
+			x1 *= 2; y1 *= 2;
+			x2 *= 2; y2 *= 2;
+
+			lef = min(lef, min(x1, x2));
+			rig = max(rig, max(x1, x2));
+
+			down = min(down, min(y1, y2));
+			up = max(up, max(y1, y2));
+
+			line.push_back(make_four(x1, y1, x2, y2));
+		}
+
+		int st = 0, en = max(rig - lef, up - down) / 2 + 2;
+		while (st <= en)
+		{
+			for (int i = 0; i <= n; i++)
+				square[i].clear();
+
+			int mid = (st + en) / 2;
+
+			ii xy;
+			pair < ii, ii > t_sq;
+
+			square[0].push_back(make_four(0, 0, 200'000'000, 200'000'000));
+			
+			for (int i = 1; i <= n; i++)
+			{
+				xy = line[i].first;
+				t_sq = make_four(xy.first - mid, xy.second - mid, xy.first + mid, xy.second + mid);
+
+				for (int j = 0; j < square[i - 1].size(); j++)
+				{
+					pair < ii, ii > inter = find_intersect(t_sq, square[i - 1][j]);
+
+					if (inter == make_four(-1, -1, -1, -1))
+						continue;
+
+					square[i].push_back(inter);
+				}
+
+				xy = line[i].second;
+				t_sq = make_four(xy.first - mid, xy.second - mid,
+					xy.first + mid, xy.second + mid);
+
+				for (int j = 0; j < square[i - 1].size(); j++)
+				{
+					pair < ii, ii > inter = find_intersect(t_sq, square[i - 1][j]);
+
+					if (inter == make_four(-1, -1, -1, -1))
+						continue;
+
+					square[i].push_back(inter);
+				}
+			}
+
+			if (square[n].size())
+			{
+				Answer = 0.5 * mid;
+				en = mid - 1;
+			}
+			else
+				st = mid + 1;
+		}
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
