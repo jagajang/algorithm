@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data ll
+#define p_q priority_queue < data >
+#define np_q priority_queue < data, vector < data >, greater < data > >
+
+int Answer;
+int way[2][100'005];
+map < int, set < int > > mp;
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+		memset(way, 0, sizeof(way));
+		mp.clear();
+		
+		int n, m, k;
+		cin >> n >> m >> k;
+
+		for (int i = 0; i < k; i++)
+		{
+			int a, b;
+			cin >> a >> b;
+
+			mp[a].insert(b);
+		}
+
+		way[0][1] = 1;
+
+		for (int i = 1; i <= n; i++)
+		{
+			int prev = (i - 1) % 2;
+			int cur = i % 2;
+			memset(way[cur], 0, sizeof(way[cur]));
+
+			for (auto a = mp[i].begin(); a != mp[i].end(); a++)
+			{
+				int val = *a;
+
+				if(0 < val && val <= m)
+					way[cur][val] = -1;
+			}
+
+			for (int j = 1; j <= m; j++)
+			{
+				if (way[cur][j] == -1)
+				{
+					way[cur][j] = 0;
+					continue;
+				}
+
+				way[cur][j] = (way[cur][j - 1] + way[prev][j]) % INF;
+			}
+		}
+
+		Answer = way[n % 2][m];
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
