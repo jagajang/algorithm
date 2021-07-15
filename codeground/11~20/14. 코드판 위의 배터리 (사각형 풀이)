@@ -37,6 +37,13 @@ pair < ii, ii > make_four(int a, int b, int c, int d)
 	return make_pair(make_pair(a, b), make_pair(c, d));
 }
 
+int check_valid(pair < ii, ii > a)
+{
+	if (a.first.first > a.second.first || a.first.second > a.second.second)
+		return 0;
+	return 1;
+}
+
 pair < ii, ii > find_intersect(pair < ii, ii > sq1, pair < ii, ii > sq2)
 {
 	pair < ii, ii > ret;
@@ -46,9 +53,6 @@ pair < ii, ii > find_intersect(pair < ii, ii > sq1, pair < ii, ii > sq2)
 
 	ret.second.first = min(sq1.second.first, sq2.second.first);
 	ret.second.second = min(sq1.second.second, sq2.second.second);
-
-	if (ret.first.first > ret.second.first || ret.first.second > ret.second.second)
-		return make_four(-1, -1, -1, -1);
 
 	return ret;
 }
@@ -67,12 +71,12 @@ int main(int argc, char** argv)
 		int n;
 		cin >> n;
 
-		if (n > 30)
+		/*if (n > 30)
 		{
 			cout << "Case #" << test_case + 1 << endl;
 			cout << 0 << endl;
 			continue;
-		}
+		}*/
 
 		int lef = 0, rig = 200'000'000;
 		int down = 0, up = 200'000'000;
@@ -82,6 +86,14 @@ int main(int argc, char** argv)
 		{
 			int x1, y1, x2, y2;
 			cin >> x1 >> y1 >> x2 >> y2;
+
+			if (x1 == x2 && y1 > y2)
+				swap(y1, y2);
+			else if (x1 > x2)
+			{
+				swap(x1, x2);
+				swap(y1, y2);
+			}
 
 			x1 *= 2; y1 *= 2;
 			x2 *= 2; y2 *= 2;
@@ -104,37 +116,58 @@ int main(int argc, char** argv)
 			int mid = (st + en) / 2;
 
 			ii xy;
-			pair < ii, ii > t_sq;
 
 			square[0].push_back(make_four(0, 0, 200'000'000, 200'000'000));
-			
+
 			for (int i = 1; i <= n; i++)
 			{
-				xy = line[i].first;
-				t_sq = make_four(xy.first - mid, xy.second - mid, xy.first + mid, xy.second + mid);
+				ii xy1 = line[i].first;
+				pair < ii, ii > sq1 = make_four(xy1.first - mid, xy1.second - mid, xy1.first + mid, xy1.second + mid);
 
 				for (int j = 0; j < square[i - 1].size(); j++)
 				{
-					pair < ii, ii > inter = find_intersect(t_sq, square[i - 1][j]);
+					pair < ii, ii > inter = find_intersect(sq1, square[i - 1][j]);
 
-					if (inter == make_four(-1, -1, -1, -1))
-						continue;
-
-					square[i].push_back(inter);
+					if (check_valid(inter))
+						square[i].push_back(inter);
 				}
 
-				xy = line[i].second;
-				t_sq = make_four(xy.first - mid, xy.second - mid,
-					xy.first + mid, xy.second + mid);
+				ii xy2 = line[i].second;
+				pair < ii, ii > sq2 = make_four(xy2.first - mid, xy2.second - mid, xy2.first + mid, xy2.second + mid);
 
-				for (int j = 0; j < square[i - 1].size(); j++)
+				if (check_valid(find_intersect(sq1, sq2)))
 				{
-					pair < ii, ii > inter = find_intersect(t_sq, square[i - 1][j]);
+					// intersect exist
 
-					if (inter == make_four(-1, -1, -1, -1))
-						continue;
+					pair < ii, ii > sq3[3] = {
+						make_four(sq2.first.first, sq1.second.second, sq1.second.first, sq2.second.second),
+						make_four(sq1.second.first, sq2.first.second, sq2.second.first, sq1.second.second),
+						make_four(sq1.second.first, sq1.second.second, sq2.second.first, sq2.second.second)
+					};
 
-					square[i].push_back(inter);
+					for (int k = 0; k < 3; k++)
+					{
+						if (check_valid(sq3[k]) == 0) continue;
+
+						for (int j = 0; j < square[i - 1].size(); j++)
+						{
+							pair < ii, ii > inter = find_intersect(sq3[k], square[i - 1][j]);
+
+							if (check_valid(inter))
+								square[i].push_back(inter);
+						}
+					}
+				}
+				else
+				{
+					// no intersect
+					for (int j = 0; j < square[i - 1].size(); j++)
+					{
+						pair < ii, ii > inter = find_intersect(sq2, square[i - 1][j]);
+
+						if (check_valid(inter))
+							square[i].push_back(inter);
+					}
 				}
 			}
 
