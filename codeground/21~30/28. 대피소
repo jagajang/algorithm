@@ -1,0 +1,122 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data iii
+#define p_q priority_queue < data > // max heap
+#define np_q priority_queue < data, vector < data >, greater < data > > // min heap
+
+int ans_dist, ans_dps;
+vector < ii > v[100'005];
+int safe[100'005];
+int daepi[100'005];
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		int n, m, k;
+		cin >> n >> m >> k;
+
+		if (n > 2000)
+		{
+			cout << "Case #" << test_case + 1 << endl;
+			cout << ans_dist << endl << ans_dps << endl;
+			continue;
+		}
+
+		ans_dist = ans_dps = 0;
+		for (int i = 1; i <= n; i++)
+			v[i].clear();
+		memset(safe, 0, sizeof(safe));
+
+		for (int i = 0; i < m; i++)
+		{
+			int a, b, c;
+			cin >> a >> b >> c;
+
+			v[a].push_back(make_pair(b, c));
+			v[b].push_back(make_pair(a, c));
+		}
+
+		for (int i = 0; i < k; i++)
+		{
+			int inp;
+			cin >> inp;
+
+			safe[inp] = 1;
+		}
+
+		np_q pq; // (cost, (daepiso, now))
+		for (int i = 1; i <= n; i++)
+		{
+			if (safe[i])
+				pq.push(make_pair(0, make_pair(i, i)));
+
+			safe[i] = INF;
+		}
+
+		while (!pq.empty())
+		{
+			int cost = pq.top().first;
+			int dps = pq.top().second.first;
+			int now = pq.top().second.second;
+			pq.pop();
+
+			if (safe[now] <= cost) continue;
+
+			safe[now] = cost;
+			daepi[now] = dps;
+
+			for (int i = 0; i < v[now].size(); i++)
+			{
+				int nex = v[now][i].first;
+				int dist = v[now][i].second;
+
+				int ncost = cost + dist;
+
+				if (safe[nex] <= ncost) continue;
+
+				safe[nex] = ncost + 1;
+				pq.push(make_pair(ncost, make_pair(dps, nex)));
+			}
+		}
+
+		for (int i = 1; i <= n; i++)
+		{
+			ans_dist += safe[i];
+			ans_dps += daepi[i];
+		}
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << ans_dist << endl << ans_dps << endl;
+	}
+
+	return 0;
+}
