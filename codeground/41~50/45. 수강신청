@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data iii
+#define p_q priority_queue < data > // max heap
+#define np_q priority_queue < data, vector < data >, greater < data > > // min heap
+
+int Answer;
+int sum[2][20005];
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+		memset(sum, 0, sizeof(sum));
+		sum[1][0] = 1;
+
+		int n, m;
+		cin >> n >> m;
+
+		for (int i = 0; i < n; i++)
+		{
+			int now = i % 2;
+			int prev = 1 - now;
+
+			memset(sum[now], 0, sizeof(sum[now]));
+
+			int inp;
+			cin >> inp;
+
+			for (int j = 0; j <= m; j++)
+			{
+				if (sum[prev][j])
+				{
+					sum[now][j] = 1;
+					sum[now][j + inp] = 1;
+				}
+			}
+		}
+
+		for (Answer = m; Answer >= 0; Answer--)
+			if (sum[n % 2][Answer])
+				break;
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
