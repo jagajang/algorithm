@@ -1,0 +1,82 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data iii
+#define p_q priority_queue < data > // max heap
+#define np_q priority_queue < data, vector < data >, greater < data > > // min heap
+
+int Answer;
+int arr[100'005];
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 100'005;
+		
+		int n, m;
+		cin >> n >> m;
+
+		for (int i = 0; i < n; i++)
+			cin >> arr[i];
+
+		int st = 0, en = 0, sum = 0;
+
+		while (en < n)
+		{
+			if (sum >= m)
+			{
+				Answer = min(Answer, en - st);
+				
+				sum -= arr[st++];
+			}
+			else
+			{
+				sum += arr[en++];
+			}
+		}
+
+		while (sum >= m)
+		{
+			Answer = min(Answer, en - st);
+
+			sum -= arr[st++];
+		}
+
+		if (Answer == 100'005)
+			Answer = 0;
+
+
+		cout << "#testcase" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
