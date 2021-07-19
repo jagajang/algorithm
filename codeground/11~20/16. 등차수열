@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data iii
+#define p_q priority_queue < data > // max heap
+#define np_q priority_queue < data, vector < data >, greater < data > > // min heap
+
+ll Answer;
+
+ll gcd(ll a, ll b)
+{
+	if (a < b)
+		swap(a, b);
+
+	while (b)
+	{
+		ll temp = a;
+
+		a = b;
+		b = temp % b;
+	}
+
+	return a;
+}
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+
+		int n;
+		cin >> n;
+
+		ll d, prev, inp, diff;
+		
+		n -= 2;
+		cin >> prev;
+		cin >> inp;
+
+		d = inp - prev;
+		prev = inp;
+
+		while (n--)
+		{
+			cin >> inp;
+
+			ll diff = inp - prev;
+
+			if (d == 0 || diff == 0)
+				d = 0;
+			else
+				d = gcd(d, diff);
+		}
+
+		Answer = 1;
+		for (ll i = 1; i <= d / 2; i++)
+		{
+			if (d % i == 0)
+				Answer++;
+		}
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
