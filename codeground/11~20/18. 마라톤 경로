@@ -1,0 +1,102 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data iii
+#define p_q priority_queue < data > // max heap
+#define np_q priority_queue < data, vector < data >, greater < data > > // min heap
+
+int Answer;
+
+int arr[105][105];
+int way[105][105][15];
+
+int dist(int a, int b)
+{
+	if (a < 0)
+		a = -a;
+	if (b < 0)
+		b = -b;
+
+	return abs(a - b);
+}
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		Answer = 0;
+
+		int se, ga, water;
+		cin >> ga >> se >> water;
+
+		for (int i = 0; i <= se; i++)
+			for (int j = 0; j <= ga; j++)
+			{
+				cin >> arr[i][j];
+
+				for (int k = 0; k <= water; k++)
+					way[i][j][k] = INF;
+			}
+
+		way[0][0][0] = 0;
+
+		for (int i = 0; i <= se; i++)
+		{
+			for (int j = 0; j <= ga; j++)
+			{
+				for (int k = 0; k <= water; k++)
+				{
+					way[i + 1][j][k] = min(way[i + 1][j][k],
+						way[i][j][k] + dist(arr[i][j], arr[i + 1][j]));
+					way[i][j + 1][k] = min(way[i][j + 1][k],
+						way[i][j][k] + dist(arr[i][j], arr[i][j + 1]));
+
+					if (arr[i + 1][j] < 0)
+					{
+						way[i + 1][j][k + 1] = min(way[i + 1][j][k + 1],
+							way[i][j][k] + dist(arr[i][j], arr[i + 1][j]));
+					}
+					if (arr[i][j + 1] < 0)
+					{
+						way[i][j + 1][k + 1] = min(way[i][j + 1][k + 1],
+							way[i][j][k] + dist(arr[i][j], arr[i][j + 1]));
+					}
+				}
+			}
+		}
+
+		Answer = way[se][ga][water];
+
+		cout << "Case #" << test_case + 1 << endl;
+		cout << Answer << endl;
+	}
+
+	return 0;
+}
