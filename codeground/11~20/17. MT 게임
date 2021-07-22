@@ -56,7 +56,7 @@ int main(int argc, char** argv)
 			if (k == 1)
 			{
 				int mod = n % (a + b);
-				if (mod == 0 || mod > a)
+				if (mod > 0 && mod <= a)
 					flag = 1;
 			}
 
