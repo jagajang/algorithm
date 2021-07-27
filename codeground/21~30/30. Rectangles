@@ -1,0 +1,107 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data int
+#define p_q priority_queue < data > // max heap
+#define np_q priority_queue < data, vector < data >, greater < data > > // min heap
+
+int Answer;
+pair < ii, ii > arr[5005]; // y1, y2, x1, x2
+vector < int > inc[5005];
+int undermax[5005];
+
+int includes(pair < ii, ii > a, pair < ii, ii > b)
+{
+	if (a.first.first <= b.first.first
+		&& a.first.second >= b.first.second
+		&& a.second.first <= b.second.first
+		&& a.second.second >= b.second.second)
+		return 1;
+	return 0;
+}
+
+int dfs(int now)
+{
+	if (undermax[now])
+		return undermax[now];
+
+	if (inc[now].size() == 0)
+		return undermax[now] = 1;
+
+	int under = 0;
+	for (int i = 0; i < inc[now].size(); i++)
+	{
+		int nex = inc[now][i];
+
+		under = max(under, dfs(nex));
+	}
+
+	undermax[now] = under + 1;
+
+	return undermax[now];
+}
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		int se, ga, k;
+		cin >> se >> ga >> k;
+
+		Answer = 0;
+		for (int i = 0; i < k; i++)
+			inc[i].clear();
+		memset(undermax, 0, sizeof(undermax));
+
+		for (int i = 0; i < k; i++)
+			cin >> arr[i].first.first >> arr[i].second.first
+				>> arr[i].first.second >> arr[i].second.second;
+
+		for (int i = 0; i < k; i++)
+			for (int j = i + 1; j < k; j++)
+			{
+				if (includes(arr[i], arr[j]))
+					inc[i].push_back(j);
+				else if (includes(arr[j], arr[i]))
+					inc[j].push_back(i);
+			}
+
+		for (int i = 0; i < k; i++)
+		{
+			dfs(i);
+			Answer = max(Answer, undermax[i]);
+		}
+
+		cout << "Case #" << test_case + 1 << "\n";
+		cout << Answer << "\n";
+	}
+
+	return 0;
+}
