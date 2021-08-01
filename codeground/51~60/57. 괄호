@@ -1,0 +1,98 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
+#include <functional>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <map>
+#include <set>
+using namespace std;
+
+#define fastio ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+#define uint unsigned int
+#define ll long long
+#define ul unsigned long long
+
+#define ii pair < int, int >
+#define iii pair < int, ii >
+#define LL pair < ll, ll >
+
+#define INF 1'000'000'007
+#define LINF 1'000'000'000'000'000'007
+
+#define data int
+#define p_q priority_queue < data > // max heap
+#define np_q priority_queue < data, vector < data >, greater < data > > // min heap
+
+int Answer;
+int fin[1'000'005];
+
+char getinv(char c)
+{
+	if (c == ')')
+		return '(';
+	else if (c == '}')
+		return '{';
+	else
+		return '[';
+}
+
+int main(int argc, char** argv)
+{
+	fastio;
+	int T, test_case;
+	cin >> T;
+
+	for (test_case = 0; test_case < T; test_case++)
+	{
+		memset(fin, 0, sizeof(fin));
+
+		string s;
+		cin >> s;
+
+		stack < char > stk;
+
+		for (int i = 0; i < s.size(); i++)
+		{
+			if (s[i] == '(' || s[i] == '{' || s[i] == '[')
+				stk.push(s[i]);
+			else
+			{
+				if (stk.empty())
+				{
+					fin[0] = 0;
+					continue;
+				}
+				else if (stk.top() == getinv(s[i]))
+				{
+					int tmp = fin[stk.size()];
+					fin[stk.size()] = 0;
+					stk.pop();
+					fin[stk.size()] += tmp + 2;
+
+					Answer = max(Answer, fin[stk.size()]);
+				}
+				else
+				{
+					while (!stk.empty())
+					{
+						fin[stk.size()] = 0;
+						stk.pop();
+					}
+					fin[0] = 0;
+				}
+			}
+		}
+
+		/* output & initialization */
+		cout << "Case #" << test_case + 1 << "\n";
+		cout << Answer << "\n";
+		Answer = 0;
+	}
+
+	return 0;
+}
